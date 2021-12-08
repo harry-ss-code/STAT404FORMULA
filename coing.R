@@ -1,3 +1,28 @@
+## 4.2
+## pair t test
+tt = read.csv("STAT404.data2.csv")
+
+xx = as.numeric(tt[,2])
+yy = as.numeric(tt[,3])
+
+ind = (xx < 25)|(yy < 25)
+
+xx1 = xx[!ind]; yy1 = yy[!ind]
+## data clearning
+
+dd = xx1 - yy1; ss = var(dd)
+
+Tobs = mean(dd)/(ss/length(dd))^.5
+
+pvalue = 2*(1-pt(abs(Tobs), length(dd)-1))
+
+print(round(pvalue, 3))
+
+#95% CI for d
+
+lower.limit = mean(dd) - qt(0.96, length(dd)-1)*(var(dd)/length(dd))^.5
+
+upper.limit = mean(dd) + qt(0.96, length(dd)-1)*(var(dd)/length(dd))^.5
 ## coding for 7.1
 
 ## Numerical calculation for estimating main effects
@@ -134,7 +159,7 @@ text(qq, zz+0.05,labels=sym, cex=0.7)
 zz= abs(mu.all)
 ### Take absolution values.
 ii = order(zz)
-sym =c("A", "B", "C", "D", "AB", "AC", "AD",   
+\sym =c("A", "B", "C", "D", "AB", "AC", "AD",   
        "BC", "BD", "CD", "ABC", "ABD", "ACD", "BCD","ABCD")
 sym=sym[ii]; zz = zz[ii]; 
 qq = qnorm( 0.5+(1:15-0.5)/(2*15))
