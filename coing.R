@@ -23,6 +23,53 @@ print(round(pvalue, 3))
 lower.limit = mean(dd) - qt(0.96, length(dd)-1)*(var(dd)/length(dd))^.5
 
 upper.limit = mean(dd) + qt(0.96, length(dd)-1)*(var(dd)/length(dd))^.5
+
+## coding for 5.1
+## Sum of squares
+yy <- read.table("girder.dat", head=T)
+r.mean = rowMeans(yy)
+c.mean = colMeans(yy)
+g.mean = mean(r.mean)
+b = nrow(yy)
+k = ncol(yy)
+
+SS.b = k*sum((r.mean-g.mean)^2)
+SS.b
+SS.trt = b*sum((c.mean-g.mean)^2)
+SS.trt
+## Take note of the multiplication factors.
+
+for(i in 1:k) yy[,i] = yy[,i] - r.mean
+for(j in 1:b) yy[j,] = yy[j,] - c.mean
+SS.err = sum((yy+g.mean)^2)
+SS.err
+### A tricky way to get the residual term.
+
+print(round(c(SS.b, SS.trt, SS.err), 3))
+
+MSS.b = SS.b/(b-1); MSS.trt = SS.trt/(k-1); MSS.err = SS.err/((b-1)*(k-1))
+MSS.b
+MSS.err
+MSS.trt
+print(round(c(MSS.b, MSS.trt, MSS.err), 3))
+Ftrt<- MSS.trt/MSS.err
+Ftrt
+Fblock<- MSS.b/MSS.err
+Fblock
+#pvalue
+p.value.trt = pf(Ftrt, 3, 24, lower.tail=F)
+p.value.trt
+p.value.blk = pf(Fblock/0.007, 8, 24, lower.tail=F)
+p.value.blk
+
+##bonferroni
+
+## tukey criticle value
+qtukey (.95, 4, 24)/2^.5= 3.90/1.414 = 2.758
+
+
+
+
 ## coding for 7.1
 
 ## Numerical calculation for estimating main effects
@@ -159,7 +206,7 @@ text(qq, zz+0.05,labels=sym, cex=0.7)
 zz= abs(mu.all)
 ### Take absolution values.
 ii = order(zz)
-\sym =c("A", "B", "C", "D", "AB", "AC", "AD",   
+sym =c("A", "B", "C", "D", "AB", "AC", "AD",   
        "BC", "BD", "CD", "ABC", "ABD", "ACD", "BCD","ABCD")
 sym=sym[ii]; zz = zz[ii]; 
 qq = qnorm( 0.5+(1:15-0.5)/(2*15))
