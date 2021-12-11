@@ -67,9 +67,57 @@ p.value.blk
 ## tukey criticle value
 qtukey (.95, 4, 24)/2^.5= 3.90/1.414 = 2.758
 
+## 6.2
+
+y11 = c(20, 16, 17, 18, 15, 16, 19, 14, 15, 24)
+y12 = c(26, 40, 28, 38, 38, 30, 26, 38, 45, 38)
+y13 = c(25, 40, 30, 17, 16, 45, 49, 33, 30, 20)
+y21 = c(24, 18, 17, 17, 15, 23, 14, 18, 12, 11)
+y22 = c(32, 22, 30, 35, 32, 28, 27, 28, 30, 30)
+y23 = c(10, 13, 17, 16, 15, 14, 11, 14, 15, 16)
+
+ybar.ij = rbind(c(mean(y11),mean(y12),mean(y13)),
+                c(mean(y21),mean(y22),mean(y23)))
 
 
+ybar.ij<- cbind(yy1,yy2)
+eta.hat = mean(ybar.ij)          ## grand average
 
+alpha.hat = rowMeans(ybar.ij) - eta.hat
+
+beta.hat = colMeans(ybar.ij) - eta.hat
+
+omega.hat = ybar.ij - eta.hat
+omega.hat = omega.hat - cbind(alpha.hat, alpha.hat, alpha.hat)
+omega.hat = omega.hat - rbind(beta.hat, beta.hat)
+I<- nrow(ybar.ij)
+J<- ncol(ybar.ij)
+n<- 10
+SS.alpha = sum(alpha.hat^2)*J*n
+SS.beta = sum(beta.hat^2)*I*n
+SS.beta
+SS.omega = sum(omega.hat^2)*n
+
+SS.error = (n-1)*(var(y11)+var(y12)+var(y13))
+SS.error = SS.error + (n-1)*(var(y21)+var(y22)+var(y23))
+
+## if matrix 
+yy1 = matrix(c(42.94, 44.88, 39.23, 38.39,
+               37.31, 46.36, 31.67, 28.49,
+               40.17, 45.10, 37.33, 28.61), 3, 4, byrow = T)
+yy2 = matrix(c(36.57, 44.24, 36.05, 34.26,
+               33.25, 46.84, 31.46, 28.10,
+               45.05, 47.56, 38.83, 36.20), 3, 4, byrow = T)
+mean.trt = colMeans(rbind(yy1,yy2))
+mean.bench = rowMeans(cbind(yy1, yy2))
+mean.int = (yy1 + yy2)/2
+ybar = mean(mean.trt)
+beta <- mean.trt - ybar
+beta
+alpha <- mean.bench - ybar
+alpha
+omega <- t(t(mean.int - mean.bench) - mean.trt)+ ybar
+omega
 ## coding for 7.1
 
 ## Numerical calculation for estimating main effects
